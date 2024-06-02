@@ -1,0 +1,224 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>3D项目初试 | 凡尘的个人博客</title><meta name="author" content="Chen"><meta name="copyright" content="Chen"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="3D建模渲染管线若素材因为渲染问题没有正确显示的情况下，要初始化或导入对应版本的渲染URP管线，然后在Project Setting → Graphics 以及 Quality下进行绑定对应的渲染URP 然后在如图的内容下进行使用，从而让建模重新被渲染   具体的渲染内容，针对物品不同或内容不同可能需要进行不同的调整，该界面下如何使用到时候可以在遇到问题的情况下再去了解不同选择的作用，在对人物建模">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3D项目初试">
+<meta property="og:url" content="https://fourserives.github.io/2024/06/01/3D%E9%A1%B9%E7%9B%AE%E5%88%9D%E8%AF%95/index.html">
+<meta property="og:site_name" content="凡尘的个人博客">
+<meta property="og:description" content="3D建模渲染管线若素材因为渲染问题没有正确显示的情况下，要初始化或导入对应版本的渲染URP管线，然后在Project Setting → Graphics 以及 Quality下进行绑定对应的渲染URP 然后在如图的内容下进行使用，从而让建模重新被渲染   具体的渲染内容，针对物品不同或内容不同可能需要进行不同的调整，该界面下如何使用到时候可以在遇到问题的情况下再去了解不同选择的作用，在对人物建模">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://w.wallhaven.cc/full/vg/wallhaven-vglkw3.png">
+<meta property="article:published_time" content="2024-06-01T02:43:14.000Z">
+<meta property="article:modified_time" content="2024-06-02T12:39:38.374Z">
+<meta property="article:author" content="Chen">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://w.wallhaven.cc/full/vg/wallhaven-vglkw3.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://fourserives.github.io/2024/06/01/3D%E9%A1%B9%E7%9B%AE%E5%88%9D%E8%AF%95/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  noticeOutdate: {"limitDay":500,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":230},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: true
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '3D项目初试',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-06-02 20:39:38'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const now = new Date()
+          const hour = now.getHours()
+          const isNight = hour <= 6 || hour >= 18
+          if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+          else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/null" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">39</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 清单</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://w.wallhaven.cc/full/vg/wallhaven-vglkw3.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">凡尘的个人博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 清单</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">3D项目初试</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-06-01T02:43:14.000Z" title="发表于 2024-06-01 10:43:14">2024-06-01</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-06-02T12:39:38.374Z" title="更新于 2024-06-02 20:39:38">2024-06-02</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="3D项目初试"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="3D建模渲染管线"><a href="#3D建模渲染管线" class="headerlink" title="3D建模渲染管线"></a>3D建模渲染管线</h1><p>若素材因为渲染问题没有正确显示的情况下，要初始化或导入对应版本的渲染URP管线，然后在<code>Project Setting → Graphics 以及 Quality</code>下进行绑定对应的渲染URP</p>
+<p>然后在如图的内容下进行使用，从而让建模重新被渲染</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/./../images/3D%E5%88%9D%E8%AF%95/image-20240601111222861.png" alt="image-20240601111222861"></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/./../images/3D%E5%88%9D%E8%AF%95/image-20240601111426637.png" alt="image-20240601111426637"></p>
+<p>具体的渲染内容，针对物品不同或内容不同可能需要进行不同的调整，该界面下如何使用到时候可以在遇到问题的情况下再去了解不同选择的作用，在对人物建模重新渲染这块，通过勾选<code>Material Upgrade</code>然后进行覆盖处理就能让人物建模重新显示出来了</p>
+<h2 id="天空盒的使用与切换"><a href="#天空盒的使用与切换" class="headerlink" title="天空盒的使用与切换"></a>天空盒的使用与切换</h2><p>在<code>Window → Rendering → Lighting</code>打开可以让我们更改的页面</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/./../images/3D%E5%88%9D%E8%AF%95/image-20240601142753229.png" alt="image-20240601142753229"></p>
+<p>在Environment选项下切换天空盒</p>
+<p><strong>细节处理：</strong></p>
+<p>调整阴影，通过减少渲染距离渲染阴影从而达成优化效果，节省资源开支，这部分需要切换到渲染管线位置来进行调整：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/./../images/3D%E5%88%9D%E8%AF%95/image-20240601143628824.png" alt="image-20240601143628824"></p>
+<p>如果为了视角效果的逼真，通常阴影部分还可以添加多段层，从而来达到不同距离下看到的影子效果各不一样：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/./../images/3D%E5%88%9D%E8%AF%95/image-20240601143922397.png" alt="image-20240601143922397"></p>
+<p>这块了解即可</p>
+<h2 id="创建光线"><a href="#创建光线" class="headerlink" title="创建光线"></a>创建光线</h2><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/./../images/3D%E5%88%9D%E8%AF%95/image-20240601144533623.png" alt="image-20240601144533623"></p>
+<p>以上选项对应的内容参考Unity文档手册即可</p>
+<p>自己调整成需要的光线后点击<code>Generate Lighting</code>完成光线的编辑</p>
+<p>接下来是环境光的设置，<strong>环境光源的类型可分为 天空盒、渐变和颜色</strong></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/./../images/3D%E5%88%9D%E8%AF%95/image-20240601144917171.png" alt="image-20240601144917171"></p>
+<p>其中天空盒是默认设置，其光源要比较自然；渐变则是一种环境光源，<strong>利用渐变来表现天空、空气、地面三种光源的颜色</strong>，可以创造出具有强烈冲击力的场景；色彩以单一颜色来表达环境光，因此可以创造出非常生动的印象</p>
+<p>同时如果因为有天空盒，天空盒的存在也会影响环境光，导致照射的环境光的色彩不一样，这也可以进行调整，比如调整成默认的环境光，也支持自己调整对应颜色：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/./../images/3D%E5%88%9D%E8%AF%95/image-20240601144851658.png" alt="image-20240601144851658"></p>
+<p>这部分环境光的内容也可以参考：<a target="_blank" rel="noopener" href="https://styly.cc/tips/unity-lighting/">https://styly.cc/tips/unity-lighting/</a></p>
+<p>详细讲解也可以参考：<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=VnG2gOKV9dw">https://www.youtube.com/watch?v=VnG2gOKV9dw</a></p>
+<h2 id="一些3D快捷键使用技巧"><a href="#一些3D快捷键使用技巧" class="headerlink" title="一些3D快捷键使用技巧"></a>一些3D快捷键使用技巧</h2><p>第一个是物品的摆放，一般情况下场景地图不是平坦的而是凹凸的，当我们新创建一个物品或者拖拽一个预制体进行摆放的时候，很难准确地把物品完整地与当前摆放角度摆放界面放置完整下去，这时候就可以通过**<code>V</code>键**来通过顶点快捷置入当前鼠标对应的地面</p>
+<p>需要注意的是，该快捷键的摆放遇到凹凸不平，崎岖位置进行摆放，可能会因为顶点的偏移导致很难精准地放置到我们想要放到的斜面位置上</p>
+<p>不过也可以通过<code>ctrl ＋ shift</code>拖动物体来与放置的位置进行缝合</p>
+<p>第二个就是摄像机地快捷设置，在3D搭建场景里边，为了让Game窗口能够在一个比较符合我们的角度上进行摆放，通常可以在Scene先切换到一个合适地视角里，然后通过选中相机，快捷键<code>Ctrl+shift＋f</code>进行设置，这样相机的视角就是我们当前Scene下的视角了</p>
+<h1 id="地图场景"><a href="#地图场景" class="headerlink" title="地图场景"></a>地图场景</h1><h2 id="场景快速搭建-polybrush"><a href="#场景快速搭建-polybrush" class="headerlink" title="场景快速搭建(polybrush)"></a>场景快速搭建(polybrush)</h2><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/./../images/3D%E5%88%9D%E8%AF%95/image-20240601201010428.png" alt="image-20240601201010428"></p>
+<p>导入成功后就可以看到多了一个Tool选项，选择PloyBrush即可打开对应的窗口，通过在窗口中进行场景编辑</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/./../images/3D%E5%88%9D%E8%AF%95/image-20240601203517685.png" alt="image-20240601203517685"></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/./../images/3D%E5%88%9D%E8%AF%95/image-20240602173000978.png" alt="image-20240602173000978"></p>
+<p>通常可以直接<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/./../images/3D%E5%88%9D%E8%AF%95/image-20240602173031063.png" alt="image-20240602173031063">基于这两个右键Material创建出对应的材质球，这样就可以继续通过Polybrush工具进行绘制了</p>
+<p>polybrush提供了五个小功能，这些功能可以快速进行场景的搭建，具体的运用可以参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_57250692/article/details/132864343">https://blog.csdn.net/qq_57250692/article/details/132864343</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_50114337/article/details/128314370">https://blog.csdn.net/weixin_50114337/article/details/128314370</a></p>
+<h2 id="场景地图扩大-probuilder"><a href="#场景地图扩大-probuilder" class="headerlink" title="场景地图扩大(probuilder)"></a>场景地图扩大(probuilder)</h2><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/./../images/3D%E5%88%9D%E8%AF%95/image-20240601204630548.png" alt="image-20240601204630548"></p>
+<p>导入成功后也在Tool下启动ProBuilder的编辑页面，通过probuilder窗口来进行场景制作</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/./../images/3D%E5%88%9D%E8%AF%95/image-20240601212525838.png" alt="image-20240601212525838"></p>
+<p>通常是左键选择对应的内容，然后再左边的Shape Tool下选择模板，同时可以调整该场景(物体)的大小以及网格数量(1*1)</p>
+<p>如果需要细微调动地图位置移动可以了解下<code>ProGrids</code></p>
+<p>然后是地图(一般是用Plane图形)创建好要为其加上颜色，相当于陆地颜色，则要创建一个<code>Material</code>的材质球，然后把材质球拖动过去，进行自定义调色即可</p>
+<p>最后是基础地形场景构建可以参考学习的内容：<a target="_blank" rel="noopener" href="https://blog.csdn.net/WGYHAPPY/article/details/117851090">https://blog.csdn.net/WGYHAPPY/article/details/117851090</a></p>
+<h1 id="地图烘焙"><a href="#地图烘焙" class="headerlink" title="地图烘焙"></a>地图烘焙</h1><p>首先还是要先下载对应的插件<code>AI Navigation</code>，然后便可以在<code>Window → AI → Navigation</code>打开对应的窗口</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/./../images/3D%E5%88%9D%E8%AF%95/image-20240602194856863.png" alt="image-20240602194856863"></p>
+<p>该圆柱就是表示人物的大小与宽展，以及能够爬坡的角度等，然后是对当前主场景或者说主地形进行设置，让其选为可行区域(Walkable)或者不可行区域(Not Walkable)</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/./../images/3D%E5%88%9D%E8%AF%95/image-20240602195430995.png" alt="image-20240602195430995"></p>
+<p>然后通过在<code>Bake</code>选项下进行设置应用</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/./../images/3D%E5%88%9D%E8%AF%95/image-20240602195739356.png" alt="image-20240602195739356"></p>
+<p>这样就能在场景里看到哪部分区域是可行区域或者不可行区域了(有浅蓝色覆盖就是可行区域)，然后也要对场景里的一些物体，比如树木、巨石、城楼等实际物体的Navigation也进行调整，原理也和上边的操作一样，设置区域完成后也要记得按<code>Bake</code>进行运用，最后可以观察到：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/./../images/3D%E5%88%9D%E8%AF%95/image-20240602200316196.png" alt="image-20240602200316196"></p>
+<p><strong>PS：</strong>该方法主要是用来设置地图场景<strong>默认本身就不能移动的物体</strong>，所以通过Navigation里边直接设置可以更加方便，但是如果我们只要让单个物品设置为障碍物不能被经过呢？</p>
+<p>这时候可以为单独的物体添加一个障碍物的组件<strong>Nav Mesh Obstacle</strong>，通过这种方式设置的障碍物&#x2F;碰撞体本身可以允许被移动，其移动的时候不可行区域也会跟着移动</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/./../images/3D%E5%88%9D%E8%AF%95/image-20240602201745481.png" alt="image-20240602201745481"></p>
+<p>以上两种方式分别对应了场景物体里边静态&#x2F;不可移动以及动态&#x2F;可被移动的设置，当前者物体被移动的时候，其不可行区域依然保持不变，而后者则可以跟着物体被移动</p>
+<p>诸如此类下显示的绿色范围就是不可行区域的范围大小了，而由于默认范围大小没有调整，就是按照人物的宽展来的，所以还要对人物的宽展与大小进行设置：</p>
+<p>为人物添加一个新的组件<strong>Nav Mesh Agent</strong></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/./../images/3D%E5%88%9D%E8%AF%95/image-20240602200742269.png" alt="image-20240602200742269"></p>
+<p>同时在调整完成后还要对Navigation对应的Bake数值上也进行更改，其大小与宽展也要同人物该组件绑定的数值保持一致！</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://fourserives.github.io">Chen</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://fourserives.github.io/2024/06/01/3D%E9%A1%B9%E7%9B%AE%E5%88%9D%E8%AF%95/">https://fourserives.github.io/2024/06/01/3D%E9%A1%B9%E7%9B%AE%E5%88%9D%E8%AF%95/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://fourserives.github.io" target="_blank">凡尘的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://w.wallhaven.cc/full/vg/wallhaven-vglkw3.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2024/05/26/%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%AF%87/"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://w.wallhaven.cc/full/vg/wallhaven-vglkw3.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">字符串篇</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/null" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Chen</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">39</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>/前往博客</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Fourserives" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#3D%E5%BB%BA%E6%A8%A1%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF"><span class="toc-number">1.</span> <span class="toc-text">3D建模渲染管线</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%A9%E7%A9%BA%E7%9B%92%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%88%87%E6%8D%A2"><span class="toc-number">1.1.</span> <span class="toc-text">天空盒的使用与切换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%85%89%E7%BA%BF"><span class="toc-number">1.2.</span> <span class="toc-text">创建光线</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B3D%E5%BF%AB%E6%8D%B7%E9%94%AE%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7"><span class="toc-number">1.3.</span> <span class="toc-text">一些3D快捷键使用技巧</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9C%B0%E5%9B%BE%E5%9C%BA%E6%99%AF"><span class="toc-number">2.</span> <span class="toc-text">地图场景</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA-polybrush"><span class="toc-number">2.1.</span> <span class="toc-text">场景快速搭建(polybrush)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF%E5%9C%B0%E5%9B%BE%E6%89%A9%E5%A4%A7-probuilder"><span class="toc-number">2.2.</span> <span class="toc-text">场景地图扩大(probuilder)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9C%B0%E5%9B%BE%E7%83%98%E7%84%99"><span class="toc-number">3.</span> <span class="toc-text">地图烘焙</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/06/01/3D%E9%A1%B9%E7%9B%AE%E5%88%9D%E8%AF%95/" title="3D项目初试"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://w.wallhaven.cc/full/vg/wallhaven-vglkw3.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="3D项目初试"/></a><div class="content"><a class="title" href="/2024/06/01/3D%E9%A1%B9%E7%9B%AE%E5%88%9D%E8%AF%95/" title="3D项目初试">3D项目初试</a><time datetime="2024-06-01T02:43:14.000Z" title="发表于 2024-06-01 10:43:14">2024-06-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/05/26/%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%AF%87/" title="字符串篇"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://w.wallhaven.cc/full/vg/wallhaven-vglkw3.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="字符串篇"/></a><div class="content"><a class="title" href="/2024/05/26/%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%AF%87/" title="字符串篇">字符串篇</a><time datetime="2024-05-26T02:06:43.000Z" title="发表于 2024-05-26 10:06:43">2024-05-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/05/22/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" title="动态规划"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://w.wallhaven.cc/full/vg/wallhaven-vglkw3.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="动态规划"/></a><div class="content"><a class="title" href="/2024/05/22/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" title="动态规划">动态规划</a><time datetime="2024-05-22T02:13:26.000Z" title="发表于 2024-05-22 10:13:26">2024-05-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/05/17/%E5%9B%BE%E8%AE%BA/" title="图论"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://w.wallhaven.cc/full/vg/wallhaven-vglkw3.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="图论"/></a><div class="content"><a class="title" href="/2024/05/17/%E5%9B%BE%E8%AE%BA/" title="图论">图论</a><time datetime="2024-05-17T02:35:37.000Z" title="发表于 2024-05-17 10:35:37">2024-05-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/05/03/%E9%93%BE%E8%A1%A8/" title="链表"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://w.wallhaven.cc/full/vg/wallhaven-vglkw3.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="链表"/></a><div class="content"><a class="title" href="/2024/05/03/%E9%93%BE%E8%A1%A8/" title="链表">链表</a><time datetime="2024-05-03T02:30:26.000Z" title="发表于 2024-05-03 10:30:26">2024-05-03</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 - 2024 By Chen</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="50" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
