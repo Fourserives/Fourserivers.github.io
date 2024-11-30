@@ -1,0 +1,511 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>角色3C（一） | 凡尘的个人博客</title><meta name="author" content="Chen"><meta name="copyright" content="Chen"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="有限状态机核心主要分为四个部分：  State：状态，一个状态机至少拥有两个状态(Enter&#x2F;Exit) Event：事件，执行某个操作的触发条件 Action：动作委托，事件执行后就即刻执行对应的动作 Transition：变换，状态之间的相互切换  状态机部分状态机部分在基类定义的时候就可以划分为几个部分： Entity实体类 → EntityStateManager实体状态管理器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="角色3C（一）">
+<meta property="og:url" content="https://fourserives.github.io/2024/11/19/%E8%A7%92%E8%89%B23C%EF%BC%88%E4%B8%80%EF%BC%89/index.html">
+<meta property="og:site_name" content="凡尘的个人博客">
+<meta property="og:description" content="有限状态机核心主要分为四个部分：  State：状态，一个状态机至少拥有两个状态(Enter&#x2F;Exit) Event：事件，执行某个操作的触发条件 Action：动作委托，事件执行后就即刻执行对应的动作 Transition：变换，状态之间的相互切换  状态机部分状态机部分在基类定义的时候就可以划分为几个部分： Entity实体类 → EntityStateManager实体状态管理器">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://w.wallhaven.cc/full/vg/wallhaven-vglkw3.png">
+<meta property="article:published_time" content="2024-11-19T07:59:58.000Z">
+<meta property="article:modified_time" content="2024-11-20T09:07:23.078Z">
+<meta property="article:author" content="Chen">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://w.wallhaven.cc/full/vg/wallhaven-vglkw3.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://fourserives.github.io/2024/11/19/%E8%A7%92%E8%89%B23C%EF%BC%88%E4%B8%80%EF%BC%89/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  noticeOutdate: {"limitDay":500,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":230},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: true
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '角色3C（一）',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-11-20 17:07:23'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const now = new Date()
+          const hour = now.getHours()
+          const isNight = hour <= 6 || hour >= 18
+          if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+          else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/null" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">58</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 清单</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://w.wallhaven.cc/full/vg/wallhaven-vglkw3.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">凡尘的个人博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 清单</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">角色3C（一）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-11-19T07:59:58.000Z" title="发表于 2024-11-19 15:59:58">2024-11-19</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-11-20T09:07:23.078Z" title="更新于 2024-11-20 17:07:23">2024-11-20</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="角色3C（一）"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="有限状态机"><a href="#有限状态机" class="headerlink" title="有限状态机"></a>有限状态机</h1><p>核心主要分为四个部分：</p>
+<ul>
+<li>State：状态，一个状态机至少拥有两个状态(Enter&#x2F;Exit)</li>
+<li>Event：事件，执行某个操作的<strong>触发条件</strong></li>
+<li>Action：动作委托，事件执行后就即刻执行对应的动作</li>
+<li>Transition：变换，状态之间的相互切换</li>
+</ul>
+<h1 id="状态机部分"><a href="#状态机部分" class="headerlink" title="状态机部分"></a>状态机部分</h1><p>状态机部分在基类定义的时候就可以划分为几个部分：</p>
+<p><strong>Entity实体类 → EntityStateManager实体状态管理器 → EntityState实体状态类</strong></p>
+<p>实体类或者基类的创建，采用<strong>自引用＋泛型＋继承</strong>的方式</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title">Entity</span> : <span class="title">MonoBehaviour</span></span><br><span class="line"></span><br><span class="line"><span class="title">public</span> <span class="title">abstract</span> <span class="keyword">class</span> <span class="title">Entity</span>&lt;<span class="title">T</span>&gt; : <span class="title">Entity</span> <span class="keyword">where</span> <span class="title">T</span> : <span class="title">Entity</span>&lt;<span class="title">T</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>这种方式相当于Entity<T>不仅仅是一个安全的泛型类</strong>，约束T必须是Entity<T>自身类型或者派生类，<strong>同时还继承了基础的Entity类的所有功能</strong></p>
+<h2 id="Update驱动状态机"><a href="#Update驱动状态机" class="headerlink" title="Update驱动状态机"></a>Update驱动状态机</h2><p>每个状态中，最为频繁调用的是<code>OnStep()</code>状态，这是在除去开始和结束的每一帧都会执行的，所以要在Update()生命周期下使用</p>
+<p><strong>重点：但Update下启用状态，不需要在每个状态机下都进行，考虑到有状态的或者说会触发状态的都是实体类，所以可以直接在 实体基类 下进行即可！！！</strong></p>
+<p><strong>实体基类</strong><code>Entity</code>下：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> EntityStateManager&lt;T&gt; states &#123; <span class="keyword">get</span>; <span class="keyword">protected</span> <span class="keyword">set</span>; &#125;	</span><br><span class="line"><span class="comment">//初始化状态机管理器</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">InitializeStateManager</span>()</span> =&gt; states = GetComponent&lt;EntityStateManager&lt;T&gt;&gt;();</span><br><span class="line"></span><br><span class="line"><span class="comment">//角色控制器</span></span><br><span class="line"><span class="keyword">public</span> CharacterController controller &#123;<span class="keyword">get</span>; <span class="keyword">protected</span> <span class="keyword">set</span>;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//核心语句：每帧调用当前状态的Step()</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">HandleStates</span>()</span> =&gt; states.Step();</span><br><span class="line"></span><br><span class="line"> <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">Awake</span>()</span></span><br><span class="line"> &#123;</span><br><span class="line">    InitializeController();</span><br><span class="line">    InitializeStateManager();</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Update</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">	HandleStates();</span><br><span class="line">    HandleController();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//初始化角色控制器</span></span><br><span class="line"> <span class="function"><span class="keyword">protected</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">InitializeController</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        controller = GetComponent&lt;CharacterController&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(!controller)</span><br><span class="line">        &#123;</span><br><span class="line">            controller = gameObject.AddComponent&lt;CharacterController&gt;();</span><br><span class="line">        &#125;</span><br><span class="line">        controller.skinWidth = <span class="number">0.005f</span>;</span><br><span class="line">        controller.minMoveDistance = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"> <span class="comment">//每帧判断并进行移动</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">HandleController</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(controller.enabled)</span><br><span class="line">        &#123;</span><br><span class="line">            controller.Move(velocity * Time.deltaTime);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        transform.position += velocity * Time.deltaTime;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>相当于实体基类每帧都会运行当前状态的<code>OnStep()</code>状态，通过状态控制器来进行</p>
+<p><strong>状态控制器</strong> <code>EntityStateManager</code>也要进行相关初始化，让状态控制器里边有可以被随时调用的状态列表，同时也要<strong>维护一个状态</strong>current 进而让其开启<code>OnStep</code>函数：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//状态列表</span></span><br><span class="line"><span class="keyword">protected</span> List&lt;EntityState&lt;T&gt;&gt; m_list = <span class="keyword">new</span> List&lt;EntityState&lt;T&gt;&gt;();</span><br><span class="line"><span class="comment">//状态字典</span></span><br><span class="line"><span class="keyword">protected</span> Dictionary&lt;Type, EntityState&lt;T&gt;&gt; m_states = <span class="keyword">new</span> Dictionary&lt;Type, EntityState&lt;T&gt;&gt;();</span><br><span class="line"></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> 返回当前实体状态的实例</span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;value&gt;</span><span class="doctag">&lt;/value&gt;</span></span></span><br><span class="line"><span class="keyword">public</span> EntityState&lt;T&gt; current &#123; <span class="keyword">get</span>; <span class="keyword">protected</span> <span class="keyword">set</span>; &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">abstract</span> List&lt;EntityState&lt;T&gt;&gt; GetStateList();</span><br><span class="line"></span><br><span class="line"><span class="comment">//初始化状态列表，切换到当前状态，也就是列表第一个下标对应的状态</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">InitializeStates</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">	m_list = GetStateList();</span><br><span class="line"></span><br><span class="line">	<span class="keyword">foreach</span> (<span class="keyword">var</span> state <span class="keyword">in</span> m_list)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">var</span> type = state.GetType();</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (!m_states.ContainsKey(type))</span><br><span class="line">		&#123;</span><br><span class="line">			m_states.Add(type, state);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (m_list.Count &gt; <span class="number">0</span>)</span><br><span class="line">       &#123;</span><br><span class="line">		current = m_list[<span class="number">0</span>];</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Start</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">		<span class="comment">//初始化状态列表</span></span><br><span class="line">		InitializeStates();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Step</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">if</span> (current != <span class="literal">null</span> &amp;&amp; Time.timeScale &gt; <span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		current.Step(entity);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>整体的状态进行时步骤：实体基类 → 状态机管理类 → 状态类</strong></p>
+<p>这样让整体代码框架更加简洁明了，且不用重复地编写Update下驱动状态机的相关内容，每个状态机只要关心自己状态逻辑即可。</p>
+<p><strong>初始化注意点！！</strong></p>
+<p>在Unity中，父子类的生命周期调用函数遵循：</p>
+<p><strong><code>Awake()</code></strong>:</p>
+<ul>
+<li>父类的 <code>Awake()</code> 会在子类的 <code>Awake()</code> 之前调用。</li>
+<li>Unity 在所有脚本的 <code>Awake()</code> 被调用之前，会先执行父类的 <code>Awake()</code>，然后才会执行子类的 <code>Awake()</code>。</li>
+</ul>
+<p><strong><code>Start()</code></strong>:</p>
+<ul>
+<li>子类的 <code>Start()</code> 会在父类的 <code>Start()</code> 之前调用。</li>
+<li>在 <code>Awake()</code> 阶段之后，Unity 会先执行子类的 <code>Start()</code>，然后才会执行父类的 <code>Start()</code>。</li>
+</ul>
+<p>综上顺序为：Entity的Awake() → EntityStateManager的Awake() → EntityStateManager的Start() → Entity的Start()</p>
+<h2 id="状态的切换"><a href="#状态的切换" class="headerlink" title="状态的切换"></a>状态的切换</h2><p>状态切换就是在状态管理器下进行切换，同样按照一个状态退出(Exit)，另一个状态开始(Enter)</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> 根据类的类型更改为给定的实体状态。</span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;typeparam name=&quot;TState&quot;&gt;</span>下一个要切换的状态<span class="doctag">&lt;/typeparam&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Change</span>&lt;<span class="title">TState</span>&gt;() <span class="keyword">where</span> TState : EntityState&lt;T&gt;</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">var</span> type = <span class="keyword">typeof</span>(TState);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (m_states.ContainsKey(type))</span><br><span class="line">	&#123;</span><br><span class="line">		Change(m_states[type]);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> 根据特定实体状态的实例对其进行更改。</span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Change</span>(<span class="params">EntityState&lt;T&gt; to</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">if</span> (to != <span class="literal">null</span> &amp;&amp; Time.timeScale &gt; <span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (current != <span class="literal">null</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			current.Exit(entity);</span><br><span class="line">			</span><br><span class="line">			last = current;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		current = to;</span><br><span class="line">		current.Enter(entity);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这两个也可以合成为一个方法即可</p>
+<p><strong>状态切换精细化部分：</strong></p>
+<p>状态切换的触发，以Idle → Walk切换举例，涉及到的核心变化主要有：</p>
+<ul>
+<li>实体位置变化 —— <strong>velocity</strong>属性</li>
+<li>输入控制器监听按键</li>
+</ul>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">OnStep</span>(<span class="params">Player player</span>)</span></span><br><span class="line">  &#123;</span><br><span class="line">      <span class="keyword">var</span> inputDirection = player.inputs.GetMovementDirection();</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span>(inputDirection.sqrMagnitude &gt; <span class="number">0</span> || player.lateralVelocity.sqrMagnitude &gt; <span class="number">0</span>)</span><br><span class="line">      &#123;</span><br><span class="line">          player.states.Change&lt;WalkPlayerState&gt;();</span><br><span class="line">      &#125; </span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中核心的就是方向移动的监听(inputs.GetMovementDirection)</p>
+<h3 id="输入监听-InputAction-细致化"><a href="#输入监听-InputAction-细致化" class="headerlink" title="输入监听(InputAction)细致化"></a>输入监听(InputAction)细致化</h3><p>输入控制器主要也是通过<code>InputActionAsset</code>来实现：</p>
+<p><strong>InputActionAsset → 监听对应的InputAction → 获取对应的值</strong></p>
+<p>输入控制器监听按键，还要涉及到的精细部分，影响因素还包含了：</p>
+<ul>
+<li>按键的时间 ——&gt; 时间戳，可以作为解锁移动方向的时间点</li>
+<li><strong>方向的过滤与精确性</strong> ——&gt; <strong>死区过滤 、基于摄像机的修正</strong></li>
+</ul>
+<ol>
+<li><p><strong>死区过滤</strong></p>
+<p><strong>作用：</strong>处理细微都懂的噪音，任何小于死区的输入都会被过滤掉，从而避免角色在微小输入下发生不必要的移动</p>
+</li>
+</ol>
+<p>死区过滤部分(<strong>模板</strong>)：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">//获取角色移动方向</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">virtual</span> Vector3 <span class="title">GetMovementDirection</span>()</span></span><br><span class="line">  &#123;</span><br><span class="line">  	<span class="comment">//1. 达到可以移动的时间戳</span></span><br><span class="line">      <span class="keyword">if</span>(Time.time &lt; m_movementDirctionUnlockTime) <span class="keyword">return</span> Vector3.zero;</span><br><span class="line"><span class="comment">//2.获取移动值</span></span><br><span class="line">      <span class="keyword">var</span> <span class="keyword">value</span> = m_movement.ReadValue&lt;Vector2&gt;();</span><br><span class="line">      <span class="comment">//3.处理并获得准确的方向 → 死区过滤</span></span><br><span class="line">      <span class="keyword">return</span> GetAxisWithCrossDeadZone(<span class="keyword">value</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//涉及到让移动更加平滑(死区过滤)</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">virtual</span> Vector3 <span class="title">GetAxisWithCrossDeadZone</span>(<span class="params">Vector2 axis</span>)</span></span><br><span class="line">  &#123;</span><br><span class="line">      <span class="keyword">var</span> deadzone = InputSystem.settings.defaultDeadzoneMin;</span><br><span class="line">      <span class="comment">//过滤并修正</span></span><br><span class="line">      axis.x = Mathf.Abs(axis.x) &gt; deadzone ? RemapToDeadzone(axis.x,deadzone) : <span class="number">0</span>;</span><br><span class="line">      <span class="comment">//过滤并修正</span></span><br><span class="line">      axis.y = Mathf.Abs(axis.y) &gt; deadzone ? RemapToDeadzone(axis.y,deadzone) : <span class="number">0</span>;</span><br><span class="line">      </span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> Vector3(axis.x,<span class="number">0</span>,axis.y);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="built_in">float</span> <span class="title">RemapToDeadzone</span>(<span class="params"><span class="built_in">float</span> axis,<span class="built_in">float</span> deadzone</span>)</span> =&gt; (axis - deadzone) / (<span class="number">1</span> - deadzone);</span><br></pre></td></tr></table></figure>
+
+<p><code>InputSystem.settings.defaultDeadzoneMin</code>：默认值通常为 <strong>0.125</strong>，即 **12.5%**。这个值用于处理游戏控制器或触摸输入的细微抖动；当输入值小于 0.125 时，系统将视为没有有效输入，避免因小范围抖动导致角色误移动</p>
+<p><code> axis.x = Mathf.Abs(axis.x) &gt; deadzone ? RemapToDeadzone(axis.x,deadzone) : 0;</code></p>
+<p>该语句阐释：</p>
+<p>对输入的 <code>x</code> 轴值进行判断：如果 <code>axis.x</code> 的绝对值大于死区值则为有效输入，通过 <code>RemapToDeadzone</code> 函数重新映射；否则将其置为 0</p>
+<p><code>RemapToDeadzone</code> 函数：</p>
+<p>将超出死区的输入值进行缩放，重新映射，使得角色的移动在超出死区后的方向和大小更精准</p>
+<ol start="2">
+<li><strong>▲基于摄像机的修正</strong></li>
+</ol>
+<p>通常角色应该根据相机的朝向移动，以确保移动方向直观一致</p>
+<p>所以进一步需要使用到<code>Camera</code>摄像机组件来进行相关纠正</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">virtual</span> Vector3 <span class="title">GetMovementCameraDirection</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">    	<span class="comment">//获得方向</span></span><br><span class="line">        <span class="keyword">var</span> direction = GetMovementDirection();</span><br><span class="line">		</span><br><span class="line">    	<span class="comment">//通过摄像机进行相应纠正，使其符合实际相机朝向移动</span></span><br><span class="line">        <span class="keyword">if</span>(direction.sqrMagnitude &gt; <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">var</span> rotation = Quaternion.AngleAxis(m_camera.transform.eulerAngles.y,Vector3.up);</span><br><span class="line">            direction = rotation * direction;</span><br><span class="line">            direction = direction.normalized;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> direction;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>▲<code>sqrMagnitude</code> 是向量的平方长度，用于<strong>判断输入方向是否为非零的有效值</strong>，<strong>确定方向向量是否有效</strong>！</p>
+<p><strong>创建一个四元数旋转</strong>：&#96;&#96;Quaternion.AngleAxis(m_camera.transform.eulerAngles.y, Vector3.up)&#96; </p>
+<p>▲<strong>表示沿 <code>y</code> 轴旋转相机的水平角度</strong>( <em>m_camera.transform.eulerAngles.y</em> )，这通常表示<strong>相机的水平朝向</strong></p>
+<p>最后通过 方向 * 旋转 来让其角色的移动方向旋转到相机的朝向，从而使其移动与相机保持一致</p>
+<h1 id="实体类"><a href="#实体类" class="headerlink" title="实体类"></a>实体类</h1><p>作为实际具体的一个实体类，除了继承实体基类Entity之外，通常还要有对应的属性值内容，如果是玩家的话还要有输入系统监听器InputManager等。</p>
+<p>而属性值内容通常情况下都是要<strong>可供修改的</strong>，因为不同的实体实际上属性内容并不完全，如果是联网游戏的话，不同实体的属性类也不同，所以可以使用<code>ScriptableObject</code>来继承，针对属性类还要划分为：</p>
+<p><strong>属性基类→ 属性控制器基类 → 实体属性类 → 实体属性控制器类</strong></p>
+<p>属性基类：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">EntityStats</span>&lt;<span class="title">T</span>&gt; : <span class="title">ScriptableObject</span> <span class="keyword">where</span> <span class="title">T</span> : <span class="title">ScriptableObject</span></span><br><span class="line">&#123;</span><br><span class="line">  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>属性控制类基类</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title">EntityStatsManager</span>&lt;<span class="title">T</span>&gt; : <span class="title">MonoBehaviour</span> <span class="keyword">where</span> <span class="title">T</span> : <span class="title">EntityStats</span>&lt;<span class="title">T</span>&gt;</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> T[] stats;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> T current &#123; <span class="keyword">get</span>; <span class="keyword">private</span> <span class="keyword">set</span>; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Change</span>(<span class="params"><span class="built_in">int</span> to</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(to&gt;=<span class="number">0</span> &amp;&amp; to&lt;stats.Length)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(stats[to] != current)</span><br><span class="line">            &#123;</span><br><span class="line">                current = stats[to];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">Start</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(stats.Length &gt; <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            current = stats[<span class="number">0</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对应的实体实现类通过继承相应的内容，定义各自的属性值就能实现不同实体属性值的独立，进而让实体类通过属性值控制器StatsManager来直接获得相应的属性值</p>
+<p>以Player玩家类实现基类来举例：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">PlayerStats</span> : <span class="title">EntityStats</span>&lt;<span class="title">PlayerStats</span>&gt;</span><br><span class="line">&#123;</span><br><span class="line">    [<span class="meta">Header(<span class="string">&quot;General Stats&quot;</span>)</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">float</span> rotationSpeed = <span class="number">970f</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">float</span> friction = <span class="number">16f</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">float</span> gravityTopSpeed = <span class="number">50f</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">float</span> gravity = <span class="number">38f</span>;</span><br><span class="line">    [<span class="meta">Header(<span class="string">&quot;移动属性&quot;</span>)</span>] </span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">float</span> brakeThreshold = <span class="number">-0.8f</span>;</span><br><span class="line">    <span class="comment">//转向拖拽力</span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">float</span> turningDrag = <span class="number">28f</span>;</span><br><span class="line">    <span class="comment">//加速度</span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">float</span> acceleration = <span class="number">13f</span>;</span><br><span class="line">    <span class="comment">//最高速度</span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">float</span> topSpeed = <span class="number">6f</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">float</span> airAcceleration = <span class="number">32f</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">float</span> deceleration = <span class="number">28f</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">float</span> fallGravity = <span class="number">65f</span>;</span><br><span class="line">    [<span class="meta">Header(<span class="string">&quot;跑步属性&quot;</span>)</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">float</span> runningTurningDrag = <span class="number">14f</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">float</span> runningAcceleration = <span class="number">16f</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">float</span> runningTopSpeed = <span class="number">7.5f</span>;</span><br><span class="line"></span><br><span class="line">    [<span class="meta">Header(<span class="string">&quot;Backflip Stats&quot;</span>)</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">bool</span> canBackflip = <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">float</span> backflipJumpHeight = <span class="number">23f</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">float</span> backflipGravity = <span class="number">35f</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">float</span> backflipTurningDrag = <span class="number">2.5f</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">float</span> backflipAirAcceleration = <span class="number">12f</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">float</span> backflipTopSpeed = <span class="number">7.5f</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">float</span> backflipBackwardTurnForce = <span class="number">8f</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当中的属性都可以在Unity外侧操作直接进行更改，因为每个属性类都继承了基类，而基类又继承了ScriptableObject</p>
+<h1 id="状态内容"><a href="#状态内容" class="headerlink" title="状态内容"></a>状态内容</h1><p>一些相关状态类中值得注意的内容点，同时为了让状态与实体划分开来，通过它们之间的关联顺序可以按照：</p>
+<p><strong>实体基类 → 实体类 → 实体状态类</strong></p>
+<p>依次来将一些内容先设置完成，比如所有实体类只要涉及到移动，那么默认都会拥有的 速度值 Velocity</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Vector3 velocity &#123;<span class="keyword">get</span>; <span class="keyword">set</span>;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//上一帧位置</span></span><br><span class="line"><span class="keyword">public</span> Vector3 lateralVelocity</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">get</span> &#123;<span class="keyword">return</span> <span class="keyword">new</span> Vector3(velocity.x,<span class="number">0</span>,velocity.z);&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">set</span> &#123;velocity = <span class="keyword">new</span> Vector3(<span class="keyword">value</span>.x,velocity.y,<span class="keyword">value</span>.z);&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后再根据特定的实体类，通过实体类中定义好的<strong>事件触发器、实体属性类控制器、输入控制器</strong>等来完成后续操作</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Player</span> : <span class="title">Entity</span>&lt;<span class="title">Player</span>&gt;</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> PlayerEvents playerEvents;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> PlayerInputManager inputs &#123;<span class="keyword">get</span>; <span class="keyword">private</span> <span class="keyword">set</span>;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> PlayerStatsManager stats &#123;<span class="keyword">get</span>; <span class="keyword">private</span> <span class="keyword">set</span>;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">InitializeInputManager</span>()</span> =&gt; inputs = GetComponent&lt;PlayerInputManager&gt;();</span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">InitializeStatsManager</span>()</span> =&gt; stats = GetComponent&lt;PlayerStatsManager&gt;();</span><br><span class="line"> </span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Walk状态"><a href="#Walk状态" class="headerlink" title="Walk状态"></a>Walk状态</h2><p>与移动状态有关的主要是</p>
+<ul>
+<li>监听的按键输入（Vector2值）<ul>
+<li>结合摄像机的处理</li>
+</ul>
+</li>
+<li>速度分量<ul>
+<li>速度Velocity</li>
+<li>方向Direction</li>
+<li>加速度acceleration</li>
+<li>最高速度topSpeed</li>
+</ul>
+</li>
+<li>转向拖拽力</li>
+<li>朝向更改</li>
+<li>摩擦力</li>
+</ul>
+<p>监听的按键输入主要对应的就是通过<code>InputActionAsset</code>定义的按键，通过监听对应按键产生的Value值(Vector2类型)，再经过结合摄像机处理后的数值返回一个 Vector3 的 <strong>方向值</strong>InputDirection</p>
+<p>通过返回的方向值先进行一次判断，<strong>确定是否应该触发移动</strong>，同样通过<code>inputDirection.sqrMagnitude</code> &gt; 0来确定即可 </p>
+<p><strong>一、速度改变</strong></p>
+<p>▲通过Unity的<strong>点乘Dot获得此时实体的速度</strong>(矢量)在该方向上的速度分量： <code>Vector3.Dot(inputDirection，lateralVelocity)</code></p>
+<p><strong>细节处理：</strong>设定一个匣值来作为 移动 和 制动 的判别量</p>
+<p>基于当前的速度分量确定此时应该进行 移动 还是 制动</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(dot &gt; player.stats.current.brakeThreshold)</span><br><span class="line">    <span class="comment">//移动相关函数</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="comment">//制动相关函数</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>移动</strong></li>
+</ul>
+<p>通过 <code>实体速度分量 * 方向</code> 得到此时的速度值 <strong>velocity</strong></p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">//角色当前沿输入方向的速度分量</span></span><br><span class="line"><span class="keyword">var</span> speed = Vector3.Dot(direction,lateralVelocity);</span><br><span class="line"> <span class="comment">//获得此时的速度 </span></span><br><span class="line"><span class="keyword">var</span> velocity = direction * speed;</span><br></pre></td></tr></table></figure>
+
+<p>如果要考虑到要逐渐加速的情况下，就要先确定其加速的条件，通常情况下，加速可以分为两种情况：</p>
+<ol>
+<li><strong>此时实体速度不是最高移速</strong></li>
+<li><strong>此时实体速度与移动反向成相反方向(Vector3.Dot() &lt; 0)</strong></li>
+</ol>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment"><span class="doctag">///</span>加速条件：</span></span><br><span class="line"> <span class="comment"><span class="doctag">///</span> 1.只有当当前速度小于最高速度时才进行加速  </span></span><br><span class="line"> <span class="comment"><span class="doctag">///</span> 2.如果沿当前方向的速度为负（表示方向相反），则允许加速来调整方向 </span></span><br><span class="line"><span class="keyword">if</span>(lateralVelocity.magnitude &lt; targetTopSpeed || speed &lt; <span class="number">0</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                speed += acceleration * acclerationMultiplier * Time.deltaTime;</span><br><span class="line">                <span class="comment">//将速度限制在[-targetTopSpeed,targetTopSpeed]范围内</span></span><br><span class="line">                speed = Mathf.Clamp(speed,-targetTopSpeed,targetTopSpeed);</span><br><span class="line">            &#125;</span><br></pre></td></tr></table></figure>
+
+<p>经过加速之后的速度要重新更新，通过 <code>方向 * speed</code>更新 <strong>velocity</strong></p>
+<p><strong>PS：</strong>加速的过程也是逐帧加速的过程，所以如果要更好调整的话可以适当通过加速度系数(acclerationMultiplier)以及时间戳来逐渐提速，更加符合实际</p>
+<p><strong>二、▲转向拖拽力</strong></p>
+<p>在人物移动中，如果要让其移动过程中更加顺滑，那就不可避免地要考虑其转向时候的一个灵活转换，这里就不可避免地需要用到转向拖拽力这个内容，来使得移动在转向的时候不会十分僵硬或者出现无法灵活旋转的过程</p>
+<p>转向拖拽力首先要考虑到的是 <strong>此时位置速度矢量</strong> 与 **上一帧位置速度矢量 **的变化</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/./C:/D:/typora-images/image-20241111160957323.png" alt="image-20241111160957323"></p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//转向的速度分量</span></span><br><span class="line"><span class="keyword">var</span> turningVelocity = lateralVelocity - velocity;</span><br><span class="line"></span><br><span class="line"><span class="comment">//每帧的转向拖拽力 = 转向拖拽力 * 拖拽系数 * 每帧</span></span><br><span class="line"><span class="keyword">var</span> turningDelta = turningDrag * turningDragMultiplier * Time.deltaTime;</span><br><span class="line"></span><br><span class="line"><span class="comment">//逐渐将转向速度减小到零，使得转向逐渐平滑地停止</span></span><br><span class="line">turningVelocity = Vector3.MoveTowards(turningVelocity,Vector3.zero,turningDelta);</span><br></pre></td></tr></table></figure>
+
+<p>而最终的速度变化就应该是： <strong>方向速度矢量 ＋ 转向速度矢量</strong></p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lateralVelocity = velocity + turningVelocity;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>三、▲朝向改变</strong></p>
+<p>移动的另外一个核心点就是朝向的改变，由于按键与鼠标的移动都会给玩家此时状态带来影响，为了让其更符合游戏预期，首先就是朝向的内容要发生改变，让朝向与我们想要移动的方向保持一致</p>
+<p>朝向核心就是<code>Rotation</code>的改变: 人物方向 &#x3D; 输入的移动方向</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//朝向控制</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">FaceDirection</span>(<span class="params">Vector3 direction,<span class="built_in">float</span> degreesPerSpeed</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(direction != Vector3.zero)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//记录当前方向</span></span><br><span class="line">        <span class="keyword">var</span> rotation = transform.rotation;</span><br><span class="line">        <span class="comment">//每帧旋转速度</span></span><br><span class="line">        <span class="keyword">var</span> rotationDelta = degreesPerSpeed * Time.deltaTime;</span><br><span class="line">        <span class="comment">//朝向的方向</span></span><br><span class="line">        <span class="keyword">var</span> target = Quaternion.LookRotation(direction,Vector3.up);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//旋转 rotation 逐渐转向目标旋转 target</span></span><br><span class="line">        transform.rotation = Quaternion.RotateTowards(rotation,target,rotationDelta);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>四、摩擦力设定</strong></p>
+<p>为了让人物或者怪物移动不会导致Velocity一直发生变化(人物停止后还会小幅度或一直移动)，我们就需要使用到摩擦力，其摩擦力的设定也可以让移动更加合理</p>
+<p>摩擦力的设定本质上还是通过定义一个减速的方法，在<strong>人物停止移动的情况下调用</strong></p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//摩擦力</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Friction</span>()</span></span><br><span class="line">   &#123;</span><br><span class="line">       <span class="comment">//减速函数</span></span><br><span class="line">       Decelerate(stats.current.friction);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中，减速函数来实现人物的减速</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//减速函数</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Decelerate</span>(<span class="params"><span class="built_in">float</span> deceleration</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//每帧减速的速率</span></span><br><span class="line">        <span class="keyword">var</span> delta = deceleration * decelerationMultiplier * Time.deltaTime;</span><br><span class="line">        </span><br><span class="line">        lateralVelocity = Vector3.MoveTowards(lateralVelocity,Vector3.zero,delta);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="制动状态"><a href="#制动状态" class="headerlink" title="制动状态"></a>制动状态</h3><p>制动通常用于以下几种情况：</p>
+<ul>
+<li><strong>停止角色的运动</strong>：例如，玩家松开控制器或键盘上的移动按键后，角色的速度会逐渐降低，直到停止。</li>
+<li><strong>角色转向时的减速</strong>：当角色需要改变移动方向时，制动可以帮助角色快速改变运动轨迹。</li>
+<li><strong>过度的加速或冲刺</strong>：如果角色的速度过快，可能需要通过制动来降低速度，以避免角色运动不自然或超过某个安全或期望的速度范围。</li>
+</ul>
+<p><em>制动助于角色进行平滑的转向、停止或减速，而不是突然停止或转向</em></p>
+<p>制动可以作为一个新的状态来使用，可以通过定义一个减速的函数，当确定是制动的时候就切换为制动状态，然后通过在<code>Step()</code>下不断调用减速函数，当实体的velocity变成0的时候重新切换为<code>IdleState</code>状态即可</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">OnStep</span>(<span class="params">Player player</span>)</span></span><br><span class="line">   &#123;</span><br><span class="line">    	 <span class="comment">//调用减速函数</span></span><br><span class="line">        player.Decelerate();</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">if</span>(player.isGrounded)</span><br><span class="line">           &#123;		</span><br><span class="line">                   player.lateralVelocity = Vector3.zero;</span><br><span class="line">                   player.states.Change&lt;IdlePlayerState&gt;();</span><br><span class="line">           &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过上述提到的使用点乘来判断当前方向上的速度分量是否小于制动值来确定是否启用制动状态</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> dot = Vector3.Dot(inputDirection,player.lateralVelocity);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(dot &gt; player.stats.current.brakeThreshold)</span><br><span class="line">            &#123;</span><br><span class="line">                player.Accelerate(inputDirection);</span><br><span class="line">                player.FaceDirectionSmooth(player.lateralVelocity);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">//启用制动状态</span></span><br><span class="line">                player.states.Change&lt;BrakePlayerState&gt;();</span><br><span class="line">            &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>最后是把速度<code>velocity</code>转化为整个物体<code>transform.position</code>的实际移动，通过实体基类Update检测并调用对应的HandleController()计算完成最后人物的移动</p>
+<p><strong>拓展：</strong>角色控制器Move函数代替position直接移动</p>
+<p><code>CharacterController.Move()</code>和<code>transform.position</code>进行移动的区别</p>
+<p>角色控制器的Move()进行移动是更加高级的应用方式，它的优点主要有：</p>
+<ul>
+<li><p><strong>碰撞检测</strong>：角色会检测碰撞并停止在碰撞物表面，而不会穿过物体。</p>
+</li>
+<li><p><strong>滑坡处理</strong>：如果角色在斜坡上，<code>Move</code> 会根据斜坡的角度调整角色的位置。</p>
+</li>
+<li><p><strong>地面交互</strong>：与地形交互时，<code>Move</code> 会考虑角色是否贴地或悬空。</p>
+</li>
+<li><p><strong>移动平滑</strong>：它会自动处理阻挡、斜坡滑落和角色站立稳定性。</p>
+</li>
+</ul>
+<p>其中，角色控制器的Move(Vector3 motion)函数传入的值motion也是位移量，它的行为机制步骤如下</p>
+<ol>
+<li><p>计算目标位置：基于当前 <code>transform.position</code> 和 <code>motion</code>。</p>
+</li>
+<li><p>执行物理检测：检测目标位置是否与其他碰撞体发生碰撞。</p>
+</li>
+<li><p>调整位移：</p>
+</li>
+</ol>
+<ul>
+<li>如果有碰撞：计算允许的合法位移量。</li>
+<li>如果无碰撞：直接移动到目标位置。</li>
+</ul>
+<ol start="4">
+<li>更新角色的实际位置。</li>
+</ol>
+<p>所以相比较直接通过<code>transform.position</code>数值更改来进行移动的方式，会更加符合实际需要，也更加现实，单纯的更改坐标并不会去考虑地形障碍等要素，而通过Move()函数可以更好地实现并解决这些问题</p>
+<p>Move()也存在一些局限性，比如：</p>
+<p><strong>依赖重力</strong>：<code>CharacterController</code> 本身没有自动应用重力，需要开发者通过位移向量 <code>motion</code> 手动添加重力影响（例如 <code>motion.y -= gravity * Time.deltaTime</code>）。</p>
+<p><strong>受限于碰撞器形状</strong>：角色移动会受到 <code>CharacterController</code> 的碰撞器形状（通常是胶囊体）的约束。</p>
+<h2 id="下落状态和跳跃"><a href="#下落状态和跳跃" class="headerlink" title="下落状态和跳跃"></a>下落状态和跳跃</h2><p><strong>下落状态</strong></p>
+<p>与下落状态相关的核心部分有：</p>
+<ul>
+<li><p>地面检测</p>
+</li>
+<li><p>重力</p>
+</li>
+<li><p>朝向改变</p>
+</li>
+</ul>
+<p><strong>一、▲地面检测</strong></p>
+<p>地面检测作为判断物体是否在地面的一个核心依据，在物理判断上极为重要</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//射线检测</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">virtual</span> <span class="built_in">bool</span> <span class="title">SphereCast</span>(<span class="params">Vector3 direction,<span class="built_in">float</span> distance,<span class="keyword">out</span> RaycastHit hit,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="built_in">int</span> layer = Physics.DefaultRaycastLayers,</span></span></span><br><span class="line"><span class="params"><span class="function">        QueryTriggerInteraction queryTriggerInteraction = QueryTriggerInteraction.Ignore</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> castDistance = Mathf.Abs(distance - radius);</span><br><span class="line">        <span class="keyword">return</span> Physics.SphereCast(position,radius,direction,<span class="keyword">out</span> hit,castDistance,layer,queryTriggerInteraction);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>射线检测由Unity内置的<code>SphereCast</code>函数来实现，可以从Unity手册上了解到其对应的参数分别是：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/./C:/D:/typora-images/image-20241118203321590.png" alt="image-20241118203321590"></p>
+<p><strong>PS：</strong>out hit可以输出碰撞信息的结构体，所以其定义后的<code>out var hit</code>在经过SphereCast函数返回后被赋值，就可以通过hit值来进行一系列的操作了</p>
+<p>在地面检测的应用上，这些参数对应的内容以及应该被定义好的如下所阐释的</p>
+<ul>
+<li><strong>position 检测的起点</strong><ul>
+<li>选取世界坐标系<code>transform.position</code> + 角色控制器&#x2F;碰撞体中心点<code>controller.center</code></li>
+<li>因为世界坐标系也就是position默认都是 底部</li>
+</ul>
+</li>
+<li>radius 球体的半径     默认也是 &#x3D; 角色控制器&#x2F;碰撞体半径</li>
+<li><strong>direction 检测的方向</strong>    <ul>
+<li>地面检测就是从脚底下发射出射线，所以采用<code>Vector3.Down</code>即可</li>
+</ul>
+</li>
+<li><strong>▲castDistance 检测的实际距离</strong><ul>
+<li>检测的实际距离符合实际即可</li>
+<li>适当增加一定的偏移量(offset)</li>
+</ul>
+</li>
+</ul>
+<p><strong>PS：</strong>这里要注意的是，由于我们检测的目标距离实际上是 <strong>从目标距离中扣除球体半径以准确表示中心点的投射距离！</strong>所以检测的实际距离就是通过<code>castDistance = Mathf.Abs(distance - radius)</code> 来获得的</p>
+<p>第一步、射线检测是否有地面</p>
+<p>射线检测是确定下方是否有地面&#x2F;物体，从而让我们进一步判断其是否正处于悬浮或空中，<strong>同时加上<code>velocity.y&lt;=0 </code>更好进行精细化地判断，因为可以确保只有当角色正在下降时才进一步处理，同时避免角色在跳跃上升阶段错误触发地面检测</strong></p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(SphereCast(Vector3.down,distance,<span class="keyword">out</span> <span class="keyword">var</span> hit) &amp;&amp; verticalVelocity.y &lt;= <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+<p>通过检测来决定接下来执行的是一系列落地的状态或者悬浮&#x2F;空中状态，经过本次判断来设置一系列变量赋值，比如让isGround为true&#x2F;false，如果处于悬浮&#x2F;空中(ExitGround)</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">ExitGround</span>()</span></span><br><span class="line">   &#123;</span><br><span class="line">       <span class="keyword">if</span>(isGrounded)</span><br><span class="line">       &#123;</span><br><span class="line">           isGrounded = <span class="literal">false</span>;</span><br><span class="line">           <span class="comment">//如果有跟随父容器移动的情况下</span></span><br><span class="line">           transform.parent = <span class="literal">null</span>;</span><br><span class="line">           <span class="comment">//记录角色最后一次触碰地面的时间</span></span><br><span class="line">           lastGroundTime = Time.time;</span><br><span class="line">           <span class="comment">//确保角色离开地面时，垂直速度不会为负值（即不会向下 &quot;拉&quot; 角色）</span></span><br><span class="line">           verticalVelocity = Vector3.Max(verticalVelocity,Vector3.zero);</span><br><span class="line">           entityEvents.OnGroundExit?.Invoke();</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果处于即将落地(!isGround)，那么就要进入落地&#x2F;着陆的相关准备，但是需要注意的是，在从 空中 → 着陆 的这个阶段里边，实际上还要做另外一件事情：<strong>判断落地点是否安全&#x2F;符合地面要求</strong></p>
+<p>第二步、即将落地时判断落点是否安全</p>
+<p>当人物或者物体即将落地的时候，落地的时候可能会出现以下<strong>问题</strong>：</p>
+<ul>
+<li>如果角色的步距无法覆盖到地面，可能会导致无法正常站立</li>
+<li>如果地面过于倾斜，角色可能会滑落</li>
+</ul>
+<p>所以在判断落点位置是否安全的时候，就要通过前边射线检测返回的碰撞点进行下一步计算，只有满足<strong>点在角色步距以下</strong> 且 <strong>地面角度小于坡度限制</strong></p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">virtual</span> <span class="built_in">bool</span> <span class="title">EvaluateLanding</span>(<span class="params">RaycastHit hit</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> IsPointUnderStep(hit.point) &amp;&amp; Vector3.Angle(hit.normal, Vector3.up) &lt; controller.slopeLimit;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong><code>Vector3.Angle(hit.normal, Vector3.up) &lt; controller.slopeLimit</code>：</strong>判断碰撞点的<strong>表面法线和世界向上的夹角是否小于角色允许的坡度极限</strong></p>
+<p>角色步距的计算模板<code>IsPointUnderStep</code></p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Vector3 stepPosition =&gt; position - transform.up * (height * <span class="number">0.5f</span> - controller.stepOffset);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">virtual</span> <span class="built_in">bool</span> <span class="title">IsPointUnderStep</span>(<span class="params">Vector3 point</span>)</span> =&gt; stepPosition.y &gt; point.y;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>最终实现着陆&#x2F;落地的相关内容准备，完成人物&#x2F;实体从 空中 → 着陆的转变</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">EnterGround</span>(<span class="params">RaycastHit hit</span>)</span></span><br><span class="line">   &#123;</span><br><span class="line">       <span class="keyword">if</span>(!isGrounded)</span><br><span class="line">       &#123;</span><br><span class="line">           <span class="comment">//记录检测信息</span></span><br><span class="line">           groundHit = hit;</span><br><span class="line">           isGrounded = <span class="literal">true</span>;</span><br><span class="line">           entityEvents.OnGroundEnter?.Invoke();</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果落点并不安全的情况下，就要进行进一步修正：</p>
+<p><code>TODO</code></p>
+<p><strong>二、重力</strong></p>
+<p>下落状态涉及到的一个核心部分就是<strong>重力</strong>，当容器&#x2F;物体挂载上Rigbody组件或者角色控制器(CharacterController)时，如果让物体进行下落，那其自由落体的速度会越掉越快(Unity默认的重力模拟)</p>
+<p>在实际开发中，为了更好地模拟真实物理效果，在重力这块上就要进行一些细节上的修改，除了模拟空气阻力之外，另外一个就是<strong>定义重力模拟函数限制其下落速度不超过某个值</strong></p>
+<h3 id="重力模拟函数"><a href="#重力模拟函数" class="headerlink" title="重力模拟函数"></a>重力模拟函数</h3><p>重力垂直向下的，而基于Unity的坐标系可知其y轴是垂直向上的，所以可以知道其重力加速度<code>velocity.y</code>越来越快的话相当于负值越来越大(-∞)</p>
+<p>判断条件：<strong>1. 不在地面上</strong></p>
+<ol start="2">
+<li><strong>角色的垂直速度（向下的速度值为负）尚未达到最大下落速度</strong></li>
+</ol>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Gravity</span>()</span></span><br><span class="line">   &#123;</span><br><span class="line">    	<span class="comment">//不在地面上且确保角色的垂直速度（向下的速度值为负）尚未达到最大下落速度</span></span><br><span class="line">       <span class="keyword">if</span>(!isGrounded &amp;&amp; verticalVelocity.y &gt; -stats.current.gravityTopSpeed)</span><br><span class="line">       &#123;</span><br><span class="line">           <span class="keyword">var</span> speed = verticalVelocity.y;</span><br><span class="line">           <span class="keyword">var</span> force = verticalVelocity.y &gt; <span class="number">0</span> ? stats.current.gravity : stats.current.fallGravity;</span><br><span class="line">           <span class="comment">// v = v−gt</span></span><br><span class="line">           speed -= force * gravityMultiplier * Time.deltaTime;</span><br><span class="line">           <span class="comment">//限制在最高加速度值的范围内</span></span><br><span class="line">           speed = Mathf.Max(speed,-stats.current.gravityTopSpeed);</span><br><span class="line">        	</span><br><span class="line">           verticalVelocity = <span class="keyword">new</span> Vector3(<span class="number">0</span>,speed,<span class="number">0</span>);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>**<code>force</code>**：根据角色当前状态选择使用哪种重力值：</p>
+<ul>
+<li>**<code>stats.current.gravity</code>**：用于角色在上升时（例如跳跃的上升阶段）</li>
+<li>**<code>stats.current.fallGravity</code>**：用于角色下落时（例如自由落体阶段），通常比 <code>gravity</code> 大，模拟更快的下落效果</li>
+</ul>
+<p>此时的垂直速度要减去重力对速度的影响，根据公式： <code>v = v−gt</code></p>
+<p><strong>PS</strong>：与行走，跑步状态等区别在于其改变的速度分量是 <strong>垂直速度分量(velocity.y)</strong></p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//垂直速度</span></span><br><span class="line">   <span class="keyword">public</span> Vector3 verticalVelocity</span><br><span class="line">   &#123;</span><br><span class="line">       <span class="keyword">get</span> &#123;<span class="keyword">return</span> <span class="keyword">new</span> Vector3(<span class="number">0</span>,velocity.y,<span class="number">0</span>);&#125;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">set</span> &#123;velocity = <span class="keyword">new</span> Vector3(velocity.x, <span class="keyword">value</span>.y, velocity.z);&#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>三、朝向</strong></p>
+<p>定义的下落状态除了重力之外还有朝向的更改，和行走状态一样保持一致，使用相同函数。</p>
+<p>最后，当处理后如果此时人物站到地面上(isGround &#x3D; true)则切换为<code>Idle</code>状态</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">player.Gravity();</span><br><span class="line"><span class="comment">//朝向修正       </span></span><br><span class="line">		player.FaceDirectionSmooth(player.lateralVelocity);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(player.isGrounded)</span><br><span class="line">     &#123;</span><br><span class="line">         player.states.Change&lt;IdlePlayerState&gt;();</span><br><span class="line">     &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>区别于其他状态：</p>
+<p>下落状态的实际检测应该在各个可能存在下落情况的状态内，比如行走状态、等待状态等等，所以下落状态较为特殊，其<strong>需要一直不断地被检测是否应该切换为下落状态(isGround &#x3D; false)</strong></p>
+<p>所以可以在特定实体类下定义一个判断状态，每个状态期间可能存在会出现下落情况的都加上这个判断函数，从而准确地在该下落的时候切换为 下落状态：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Fall</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(!isGrounded)</span><br><span class="line">        &#123;</span><br><span class="line">            states.Change&lt;FallPlayerState&gt;();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>跳跃</strong></p>
+<p>跳跃与下落都是基于垂直速度进行开发的，而跳跃在游戏实际开发中如果要让其手感到位，让玩家在跳跃的时候感觉不到“迟钝”，这时候就要用到一个核心内容：“<strong>悬浮时间跳跃</strong>”（即常见的 <strong>Coyote Time</strong> 机制）</p>
+<h3 id="悬浮时间跳跃（Coyote-Time-Jump）"><a href="#悬浮时间跳跃（Coyote-Time-Jump）" class="headerlink" title="悬浮时间跳跃（Coyote Time Jump）"></a>悬浮时间跳跃（Coyote Time Jump）</h3><p>概述：在现实中，当一个人从地面起跳，即使脚已经离地，腿部仍然可以通过惯性完成跳跃。<em>而游戏中的物理机制通常是离地瞬间角色被视为“空中”，不能再跳跃。这种机制会让玩家感觉跳跃“迟钝”或“不流畅”</em></p>
+<p><strong>悬浮时间跳跃通过在角色刚离地的一段时间内允许跳跃操作，弥补了这种感受上的不足</strong></p>
+<p>悬浮时间跳跃需要我们定义一个 <strong>容错窗口时间(Coyote Time)</strong> </p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> canMultiJump = (jumpCounter &gt; <span class="number">0</span>) &amp;&amp; (jumpCounter &lt; stats.current.multiJumps);</span><br><span class="line"><span class="comment">//容错跳跃</span></span><br><span class="line"><span class="keyword">var</span> canCoyoteJump = (jumpCounter == <span class="number">0</span>) &amp;&amp; (Time.time &lt; lastGroundTime + stats.current.coyoteJumpThreshold);</span><br></pre></td></tr></table></figure>
+
+<p>容错跳跃只会发生在第一次跳跃，也就是从地面离开的时候，定义的容错时间<code>coyoteJumpThreshold</code>与离开地面瞬间的时间之和构成了 容错窗口时间：<strong>lastGroundTime + stats.current.coyoteJumpThreshold</strong></p>
+<p>当满足跳跃条件的时候触发跳跃相关内容，如果要保证手感让其符合玩家预期的话，当我们跳跃持续过程中突然松开跳跃按键，那么我们的跳跃速度本质上应该受到影响，所以可以通过调整最小跳跃高度的操作来实现我们的预期效果</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">if</span>(isGrounded || canMultiJump || canCoyoteJump)</span><br><span class="line">  &#123;</span><br><span class="line">     <span class="keyword">if</span>(inputs.GetJumpDown())</span><br><span class="line">        &#123;</span><br><span class="line">            Jump(stats.current.maxJumpHeight);</span><br><span class="line">        &#125;</span><br><span class="line">  &#125;</span><br><span class="line"><span class="comment">//当跳跃过程中松开跳跃按键，则调整最小跳跃高度</span></span><br><span class="line">       <span class="keyword">if</span>(inputs.GetJumpUp() &amp;&amp; (jumpCounter &gt; <span class="number">0</span>) &amp;&amp; verticalVelocity.y &gt; stats.current.minJumpHeight)</span><br><span class="line">       &#123;</span><br><span class="line">           verticalVelocity = Vector3.up * stats.current.minJumpHeight;</span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后是进行相关的跳跃函数内容，需要注意的是，当<strong>跳跃执行之后下一个动作状态一定是下落状态</strong></p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Jump</span>(<span class="params"><span class="built_in">float</span> height</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    jumpCounter++;</span><br><span class="line">    verticalVelocity = Vector3.up * height;</span><br><span class="line">    <span class="comment">//切换回下落状态</span></span><br><span class="line">    states.Change&lt;FallPlayerState&gt;();</span><br><span class="line">    playerEvents.OnJump?.Invoke();</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>总的来说，悬浮时间跳跃可以极大地改善跳跃的流畅度与提高复杂场景下跳跃容错性</p>
+<h1 id="泛型约束皆为Class的发现"><a href="#泛型约束皆为Class的发现" class="headerlink" title="泛型约束皆为Class的发现"></a>泛型约束皆为Class的发现</h1><p>以下定义的三个泛型类</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title">Entity</span>&lt;<span class="title">T</span>&gt; : <span class="title">Entity</span> <span class="keyword">where</span> <span class="title">T</span> : <span class="title">Entity</span>&lt;<span class="title">T</span>&gt;；</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"><span class="title">public</span> <span class="title">abstract</span> <span class="keyword">class</span> <span class="title">EntityState</span>&lt;<span class="title">T</span>&gt; <span class="keyword">where</span> <span class="title">T</span> : <span class="title">Entity</span>&lt;<span class="title">T</span>&gt;；</span><br><span class="line"></span><br><span class="line"><span class="title">public</span> <span class="title">abstract</span> <span class="keyword">class</span> <span class="title">EntityStateManager</span>&lt;<span class="title">T</span>&gt; : <span class="title">EntityStateManager</span> <span class="keyword">where</span> <span class="title">T</span> : <span class="title">Entity</span>&lt;<span class="title">T</span>&gt;；</span><br></pre></td></tr></table></figure>
+
+<p>其中，EntityState<T>泛型类的约束是Entity<T>，EntityStateManager<T>泛型类的也是也是Entity<T></p>
+<p>由于他们<strong>类型一致性</strong>：如果 <code>EntityStateManager&lt;T&gt;</code> 处理的类型是 <code>T</code>，并且 <code>EntityState&lt;T&gt;</code> 也使用相同的类型 <code>T</code>，那么 <code>EntityStateManager&lt;T&gt;</code> 可以创建、引用和管理相应的 <code>EntityState&lt;T&gt;</code> 实例。也就意味着EntityStateManager<T>类可以访问和使用EntityState类中的内容</p>
+<p><strong>PS：这种泛型约束一致产生的联系，也就是T都是代表相同类型的情况下，两个类之间可以互相访问对方的内容，但是前提是只能访问和使用public权限或者static静态的内容而已，与继承还有所不同</strong></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://fourserives.github.io">Chen</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://fourserives.github.io/2024/11/19/%E8%A7%92%E8%89%B23C%EF%BC%88%E4%B8%80%EF%BC%89/">https://fourserives.github.io/2024/11/19/%E8%A7%92%E8%89%B23C%EF%BC%88%E4%B8%80%EF%BC%89/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://fourserives.github.io" target="_blank">凡尘的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://w.wallhaven.cc/full/vg/wallhaven-vglkw3.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2024/11/19/%E8%A7%92%E8%89%B23C%EF%BC%88%E4%BA%8C%EF%BC%89/"><img class="prev-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://w.wallhaven.cc/full/vg/wallhaven-vglkw3.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">角色3C（二）</div></div></a></div><div class="next-post pull-right"><a href="/2024/10/11/%E5%85%AB%E5%8F%89%E6%A0%91/"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://w.wallhaven.cc/full/vg/wallhaven-vglkw3.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">八叉树</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/null" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Chen</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">58</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>/前往博客</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Fourserives" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA"><span class="toc-number">1.</span> <span class="toc-text">有限状态机</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%8A%B6%E6%80%81%E6%9C%BA%E9%83%A8%E5%88%86"><span class="toc-number">2.</span> <span class="toc-text">状态机部分</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Update%E9%A9%B1%E5%8A%A8%E7%8A%B6%E6%80%81%E6%9C%BA"><span class="toc-number">2.1.</span> <span class="toc-text">Update驱动状态机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8A%B6%E6%80%81%E7%9A%84%E5%88%87%E6%8D%A2"><span class="toc-number">2.2.</span> <span class="toc-text">状态的切换</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%93%E5%85%A5%E7%9B%91%E5%90%AC-InputAction-%E7%BB%86%E8%87%B4%E5%8C%96"><span class="toc-number">2.2.1.</span> <span class="toc-text">输入监听(InputAction)细致化</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%9E%E4%BD%93%E7%B1%BB"><span class="toc-number">3.</span> <span class="toc-text">实体类</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%8A%B6%E6%80%81%E5%86%85%E5%AE%B9"><span class="toc-number">4.</span> <span class="toc-text">状态内容</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Walk%E7%8A%B6%E6%80%81"><span class="toc-number">4.1.</span> <span class="toc-text">Walk状态</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%B6%E5%8A%A8%E7%8A%B6%E6%80%81"><span class="toc-number">4.1.1.</span> <span class="toc-text">制动状态</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E8%90%BD%E7%8A%B6%E6%80%81%E5%92%8C%E8%B7%B3%E8%B7%83"><span class="toc-number">4.2.</span> <span class="toc-text">下落状态和跳跃</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E5%8A%9B%E6%A8%A1%E6%8B%9F%E5%87%BD%E6%95%B0"><span class="toc-number">4.2.1.</span> <span class="toc-text">重力模拟函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%82%AC%E6%B5%AE%E6%97%B6%E9%97%B4%E8%B7%B3%E8%B7%83%EF%BC%88Coyote-Time-Jump%EF%BC%89"><span class="toc-number">4.2.2.</span> <span class="toc-text">悬浮时间跳跃（Coyote Time Jump）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B3%9B%E5%9E%8B%E7%BA%A6%E6%9D%9F%E7%9A%86%E4%B8%BAClass%E7%9A%84%E5%8F%91%E7%8E%B0"><span class="toc-number">5.</span> <span class="toc-text">泛型约束皆为Class的发现</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/11/19/%E8%A7%92%E8%89%B23C%EF%BC%88%E4%BA%8C%EF%BC%89/" title="角色3C（二）"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://w.wallhaven.cc/full/vg/wallhaven-vglkw3.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="角色3C（二）"/></a><div class="content"><a class="title" href="/2024/11/19/%E8%A7%92%E8%89%B23C%EF%BC%88%E4%BA%8C%EF%BC%89/" title="角色3C（二）">角色3C（二）</a><time datetime="2024-11-19T08:00:06.000Z" title="发表于 2024-11-19 16:00:06">2024-11-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/11/19/%E8%A7%92%E8%89%B23C%EF%BC%88%E4%B8%80%EF%BC%89/" title="角色3C（一）"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://w.wallhaven.cc/full/vg/wallhaven-vglkw3.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="角色3C（一）"/></a><div class="content"><a class="title" href="/2024/11/19/%E8%A7%92%E8%89%B23C%EF%BC%88%E4%B8%80%EF%BC%89/" title="角色3C（一）">角色3C（一）</a><time datetime="2024-11-19T07:59:58.000Z" title="发表于 2024-11-19 15:59:58">2024-11-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/11/%E5%85%AB%E5%8F%89%E6%A0%91/" title="八叉树"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://w.wallhaven.cc/full/vg/wallhaven-vglkw3.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="八叉树"/></a><div class="content"><a class="title" href="/2024/10/11/%E5%85%AB%E5%8F%89%E6%A0%91/" title="八叉树">八叉树</a><time datetime="2024-10-11T05:55:14.000Z" title="发表于 2024-10-11 13:55:14">2024-10-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/24/%E6%9F%8F%E6%9E%97%E5%99%AA%E5%A3%B0%E5%AE%9E%E8%B7%B5/" title="柏林噪声实践"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://w.wallhaven.cc/full/vg/wallhaven-vglkw3.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="柏林噪声实践"/></a><div class="content"><a class="title" href="/2024/09/24/%E6%9F%8F%E6%9E%97%E5%99%AA%E5%A3%B0%E5%AE%9E%E8%B7%B5/" title="柏林噪声实践">柏林噪声实践</a><time datetime="2024-09-24T11:33:03.000Z" title="发表于 2024-09-24 19:33:03">2024-09-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/08/19/%E8%A7%92%E8%89%B23C/" title="角色3C"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://w.wallhaven.cc/full/vg/wallhaven-vglkw3.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="角色3C"/></a><div class="content"><a class="title" href="/2024/08/19/%E8%A7%92%E8%89%B23C/" title="角色3C">角色3C</a><time datetime="2024-08-19T13:00:51.000Z" title="发表于 2024-08-19 21:00:51">2024-08-19</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 - 2024 By Chen</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="50" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
