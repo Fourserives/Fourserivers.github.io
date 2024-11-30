@@ -1,0 +1,265 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>八叉树 | 凡尘的个人博客</title><meta name="author" content="Chen"><meta name="copyright" content="Chen"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="前期准备：准备并定义好八叉树的边界 八叉树设置边界(Bound)Bound概述： 在 Unity 中，包围盒（Bounding Box）是一个几何形状，用于近似地表示物体或一组物体在三维空间中的范围或边界。它是一个简单的形状，通常是立方体或矩形，完全包围了一个物体或一组物体 Bounds 的属性通常包括包围盒的中心点位置和尺寸： public Bounds(Vector3 center，Vecto">
+<meta property="og:type" content="article">
+<meta property="og:title" content="八叉树">
+<meta property="og:url" content="https://fourserives.github.io/2024/10/11/%E5%85%AB%E5%8F%89%E6%A0%91/index.html">
+<meta property="og:site_name" content="凡尘的个人博客">
+<meta property="og:description" content="前期准备：准备并定义好八叉树的边界 八叉树设置边界(Bound)Bound概述： 在 Unity 中，包围盒（Bounding Box）是一个几何形状，用于近似地表示物体或一组物体在三维空间中的范围或边界。它是一个简单的形状，通常是立方体或矩形，完全包围了一个物体或一组物体 Bounds 的属性通常包括包围盒的中心点位置和尺寸： public Bounds(Vector3 center，Vecto">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://w.wallhaven.cc/full/vg/wallhaven-vglkw3.png">
+<meta property="article:published_time" content="2024-10-11T05:55:14.000Z">
+<meta property="article:modified_time" content="2024-10-12T08:04:50.221Z">
+<meta property="article:author" content="Chen">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://w.wallhaven.cc/full/vg/wallhaven-vglkw3.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://fourserives.github.io/2024/10/11/%E5%85%AB%E5%8F%89%E6%A0%91/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  noticeOutdate: {"limitDay":500,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":230},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: true
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '八叉树',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-10-12 16:04:50'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const now = new Date()
+          const hour = now.getHours()
+          const isNight = hour <= 6 || hour >= 18
+          if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+          else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/null" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">56</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 清单</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://w.wallhaven.cc/full/vg/wallhaven-vglkw3.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">凡尘的个人博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 清单</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">八叉树</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-10-11T05:55:14.000Z" title="发表于 2024-10-11 13:55:14">2024-10-11</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-10-12T08:04:50.221Z" title="更新于 2024-10-12 16:04:50">2024-10-12</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="八叉树"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>前期准备：准备并定义好八叉树的边界</p>
+<h1 id="八叉树"><a href="#八叉树" class="headerlink" title="八叉树"></a>八叉树</h1><h2 id="设置边界-Bound"><a href="#设置边界-Bound" class="headerlink" title="设置边界(Bound)"></a>设置边界(Bound)</h2><p><code>Bound</code>概述：</p>
+<p><strong>在 Unity 中，包围盒（Bounding Box）是一个几何形状，用于近似地表示物体或一组物体在三维空间中的范围或边界。它是一个简单的形状，通常是立方体或矩形，完全包围了一个物体或一组物体</strong></p>
+<p><strong>Bounds 的属性通常包括包围盒的中心点位置和尺寸：</strong></p>
+<p><strong><code>public Bounds(Vector3 center，Vector3 size) </code></strong></p>
+<p><strong>1.</strong> <strong>Unity中的 Bound</strong></p>
+<ul>
+<li><p><strong>渲染器包围盒</strong></p>
+<p>用于确定对象的可见性以进行相机裁剪</p>
+</li>
+</ul>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取物体的 MeshRenderer 组件</span></span><br><span class="line">MeshRender renderer = GetComponent&lt;MeshRenderer&gt;();</span><br><span class="line">Bounds bounds = renderer.bounds;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>碰撞器包围盒</strong></p>
+<p>用于计算碰撞，触发碰撞事件或进行物理模拟</p>
+</li>
+</ul>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//获取物体的 BoxCollider组件  也可以是其他类型的碰撞盒(圆、圆柱等)</span></span><br><span class="line">BoxCollider boxCollider = GetComponent&lt;BoxCollider&gt;();</span><br><span class="line">Bounds bounds = boxCollider.bounds;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>网格包围盒</strong></p>
+<p>用于优化渲染和碰撞检测</p>
+</li>
+</ul>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//获取物体的 MeshFilter组件</span></span><br><span class="line">MeshFilter MeshFilter filter = GetComponent&lt;MeshFilter&gt;();</span><br><span class="line">Bounds bounds = filter.sharedMesh.bounds;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>Bounds更具体的讲解参考：</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/caiprogram123/article/details/135441086">https://blog.csdn.net/caiprogram123/article/details/135441086</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/f_957995490/article/details/128741307">https://blog.csdn.net/f_957995490/article/details/128741307</a></p>
+<p><strong>2. Bounds.Encapsulate</strong>扩展包围盒</p>
+<p><code>Bounds.Encapsulate</code> 是 Unity 中 <code>Bounds</code> 结构体的一个方法，用于扩展当前的包围盒（bounding box）以包含指定的点或其他包围盒。</p>
+<p>主要功能：</p>
+<ul>
+<li><p><strong>扩展包围盒</strong>，使其能够包含更多的空间或对象。</p>
+</li>
+<li><p><strong>包围多个点</strong>，在计算多个对象的总包围盒时特别有用，比如你想要计算场景中多个物体的包围盒，这样可以方便进行碰撞检测、摄像机调整等。</p>
+</li>
+</ul>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Bounds bounds = <span class="keyword">new</span> Bounds();</span><br><span class="line"><span class="keyword">foreach</span> (GameObject obj <span class="keyword">in</span> worldObjects)</span><br><span class="line">&#123;</span><br><span class="line">    bounds.Encapsulate(obj.GetComponent&lt;Collider&gt;().bounds);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/./../images/%E5%85%AB%E5%8F%89%E6%A0%91/image-20241011143552210.png" alt="image-20241011143552210"></p>
+<p>将包围盒拓展起来，包括了其他的Bounds后生成的这个更大的方块框，也就是<strong>轴对齐边框</strong> 或者说 <strong>AABB</strong></p>
+<p>可以通过<code>Gizmos</code>将其显示出来，能够更加便捷地观察我们的包围盒整体的边框</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Gizmos.color = <span class="keyword">new</span> Color(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">Gizmos.DrawWireCube(oct.boundsD.center,oct.boundsD.size);</span><br></pre></td></tr></table></figure>
+
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/./../images/%E5%85%AB%E5%8F%89%E6%A0%91/image-20241011144730283.png" alt="image-20241011144730283"></p>
+<p><strong>3.</strong>  <strong>将包围盒修改为立方体，方便平均划分</strong></p>
+<p>通过取整体包围盒坐标系的某个最大值的方位，取其作为新的包围盒的“新半径”，在保持中心点不变的情况下，修改让其变为立方体</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">float</span> maxSize = Mathf.Max(<span class="keyword">new</span> <span class="built_in">float</span>[]&#123;bounds.size.x,bounds.size.y,bounds.size.z&#125;);</span><br><span class="line">Vector3 sizeVector = <span class="keyword">new</span> Vector3(maxSize,maxSize,maxSize) * <span class="number">0.5f</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//设置新包围盒边界</span></span><br><span class="line">bounds.SetMinMax(bounds.center - sizeVector,bounds.center + sizeVector);</span><br><span class="line"></span><br><span class="line">boundsD = bounds;</span><br></pre></td></tr></table></figure>
+
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/./../images/%E5%85%AB%E5%8F%89%E6%A0%91/image-20241011150444219.png" alt="image-20241011150444219"></p>
+<p>参考：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Octree</span> </span><br><span class="line">&#123;</span><br><span class="line">   <span class="keyword">public</span> OctreeRoot rootNode;</span><br><span class="line">   </span><br><span class="line">   <span class="comment">//生成树，圈定范围</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="title">Octree</span>(<span class="params">GameObject[] worldObjects,<span class="built_in">float</span> minNodeSize</span>)</span></span><br><span class="line">   &#123;</span><br><span class="line">        Bounds bounds = <span class="keyword">new</span> Bounds();</span><br><span class="line">        <span class="keyword">foreach</span> (GameObject obj <span class="keyword">in</span> worldObjects)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//核心语句！通过Encapsulate扩展包围盒</span></span><br><span class="line">            bounds.Encapsulate(obj.GetComponent&lt;Collider&gt;().bounds);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//修正变为立方体</span></span><br><span class="line">        <span class="built_in">float</span> maxSize = Mathf.Max(<span class="keyword">new</span> <span class="built_in">float</span>[]&#123;bounds.size.x,bounds.size.y,bounds.size.z&#125;);</span><br><span class="line">        Vector3 sizeVector = <span class="keyword">new</span> Vector3(maxSize,maxSize,maxSize) * <span class="number">0.5f</span>;</span><br><span class="line">        bounds.SetMinMax(bounds.center - sizeVector,bounds.center + sizeVector);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//根节点</span></span><br><span class="line">        rootNode = <span class="keyword">new</span> OctreeRoot(bounds,minNodeSize);</span><br><span class="line">        <span class="comment">//查询要找的目标点，开始第一次递归</span></span><br><span class="line">        AddObject(worldObjects);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="节点处理"><a href="#节点处理" class="headerlink" title="节点处理"></a>节点处理</h2><p>基于整体的扩展盒并不符合实际需求，而是要让每个八叉树节点都应该具有，也就是真正让其成为一个八叉树，此时每个节点都会有一个节点边界，而，每一个节点都可以往下划分出八个块：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">struct</span> OctreeObject</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> Bounds bounds;</span><br><span class="line">    <span class="keyword">public</span> GameObject gameObject;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">OctreeObject</span>(<span class="params">GameObject obj</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        bounds = obj.GetComponent&lt;Collider&gt;().bounds;</span><br><span class="line">        gameObject = obj;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">OctreeRoot</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//八叉树节点拥有自己的边界</span></span><br><span class="line">    <span class="comment">//节点边界</span></span><br><span class="line">    Bounds rootBounds;</span><br><span class="line">    <span class="comment">//该数组允许我们将立方体分成八块</span></span><br><span class="line">    Bounds[] childBounds;</span><br><span class="line">    <span class="comment">//标记数组，记录该树下八个节点中满足要求的子节点</span></span><br><span class="line">    <span class="keyword">public</span> OctreeRoot[] children = <span class="literal">null</span>;</span><br><span class="line">    <span class="comment">//能够穿过的最小尺寸</span></span><br><span class="line">    <span class="built_in">float</span> minSize;</span><br><span class="line">    <span class="comment">//记录穿过的节点 ——&gt; 为了方便记录，就定义一个容器存储必要的节点信息即可</span></span><br><span class="line">    List&lt;OctreeObject&gt; containedObjects = <span class="keyword">new</span> List&lt;OctreeObject&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">OctreeRoot</span>(<span class="params">Bounds b,<span class="built_in">float</span> minNodeSize</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        rootBounds = b;</span><br><span class="line">        minSize = minNodeSize;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在八叉树构造函数下，只要定义</p>
+<p><code> rootNode = new OctreeRoot(bounds,minNodeSize)</code>即可完成根节点的创建，后边也可以顺利进入八叉树的递归遍历过程了</p>
+<h2 id="划分八块"><a href="#划分八块" class="headerlink" title="划分八块"></a>划分八块</h2><p><strong>1.</strong> <strong>朴素划分</strong></p>
+<p>基于每个节点，由于八叉树是通过递归来实现的，这也意味着每个节点都要做一个划分八块的操作</p>
+<p>考虑到一个大的盒子里边八个盒子与大盒子的关系，中心点(center)和尺寸(size)如图：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/./../images/%E5%85%AB%E5%8F%89%E6%A0%91/image-20241012102148096.png" alt="image-20241012102148096"></p>
+<p>所以可以得到：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">OctreeRoot</span>(<span class="params">Bounds b,<span class="built_in">float</span> minNodeSize</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    <span class="comment">//由于是正方体，所以size的三个轴都一样，任取一个</span></span><br><span class="line">    <span class="built_in">float</span> quarter = rootBounds.size.y / <span class="number">4f</span>;</span><br><span class="line">    <span class="built_in">float</span> childLength = rootBounds.size.y / <span class="number">2</span>;</span><br><span class="line">    <span class="comment">//子节点Bounds的尺寸</span></span><br><span class="line">    Vector3 childSize = <span class="keyword">new</span> Vector3(childLength,childLength,childLength);</span><br><span class="line">    childBounds = <span class="keyword">new</span> Bounds[<span class="number">8</span>];</span><br><span class="line">    childBounds[<span class="number">0</span>] = <span class="keyword">new</span> Bounds(rootBounds.center + <span class="keyword">new</span> Vector3(-quarter,quarter,-quarter),childSize);</span><br><span class="line">    childBounds[<span class="number">1</span>] = <span class="keyword">new</span> Bounds(rootBounds.center + <span class="keyword">new</span> Vector3(-quarter,-quarter,-quarter),childSize);</span><br><span class="line">    childBounds[<span class="number">2</span>] = <span class="keyword">new</span> Bounds(rootBounds.center + <span class="keyword">new</span> Vector3(-quarter,-quarter,quarter),childSize);</span><br><span class="line">    childBounds[<span class="number">3</span>] = <span class="keyword">new</span> Bounds(rootBounds.center + <span class="keyword">new</span> Vector3(-quarter,quarter,quarter),childSize);</span><br><span class="line">    childBounds[<span class="number">4</span>] = <span class="keyword">new</span> Bounds(rootBounds.center + <span class="keyword">new</span> Vector3(quarter,quarter,quarter),childSize);</span><br><span class="line">    childBounds[<span class="number">5</span>] = <span class="keyword">new</span> Bounds(rootBounds.center + <span class="keyword">new</span> Vector3(quarter,-quarter,-quarter),childSize);</span><br><span class="line">    childBounds[<span class="number">6</span>] = <span class="keyword">new</span> Bounds(rootBounds.center + <span class="keyword">new</span> Vector3(quarter,quarter,-quarter),childSize);</span><br><span class="line">    childBounds[<span class="number">7</span>] = <span class="keyword">new</span> Bounds(rootBounds.center + <span class="keyword">new</span> Vector3(quarter,-quarter,quarter),childSize);</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>继续通过Gizmos绘制，可以更清晰地看到此时被划分为八个块：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/./../images/%E5%85%AB%E5%8F%89%E6%A0%91/image-20241012103821697.png" alt="image-20241012103821697"></p>
+<p>每个节点下都要进行生成八叉树的操作，也就是要进行递归的操作，递归操作的终止条件就是当八叉树的节点达到最短尺寸minSize的时候停止继续划分</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//递归 每个节点都要生成一个八叉树</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Divide</span>()</span></span><br><span class="line">   &#123;</span><br><span class="line">       </span><br><span class="line">       <span class="keyword">if</span>(rootBounds.size.y&lt;=minSize) <span class="keyword">return</span>;</span><br><span class="line">       children = <span class="keyword">new</span> OctreeRoot[<span class="number">8</span>];</span><br><span class="line">       <span class="keyword">for</span>(<span class="built_in">int</span> i=<span class="number">0</span>; i&lt;<span class="number">8</span>; i++)</span><br><span class="line">       &#123;</span><br><span class="line">           children[i] = <span class="keyword">new</span> OctreeRoot(childBounds[i],minSize);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>2.</strong> <strong>基于目标&#x2F;特殊情况划分(朴素优化)</strong></p>
+<p>实际的八叉树从高往低递归，只有在<strong>围绕所要找的目标物体大致区域才会生成八叉树</strong>，在此基础上要进行相关判定，以确保准确无误地在正确位置上划分八叉树，而免去其他无意义的八叉树的划分</p>
+<ol>
+<li><p>在生成树的时候就先把目标值传入</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">	... </span><br><span class="line"> <span class="comment">//根节点</span></span><br><span class="line"> rootNode = <span class="keyword">new</span> OctreeRoot(bounds,minNodeSize);</span><br><span class="line"> AddObject(worldObjects);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">AddObject</span>(<span class="params">GameObject[] worldObjects</span>)</span></span><br><span class="line"> &#123;</span><br><span class="line">      <span class="keyword">foreach</span> (GameObject obj <span class="keyword">in</span> worldObjects)</span><br><span class="line">      &#123;</span><br><span class="line">          rootNode.AddObject(obj);</span><br><span class="line">      &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>节点处理</p>
+<p>根据目标值进行分割(Dividing)</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">AddObject</span>(<span class="params">GameObject obj</span>)</span></span><br><span class="line">  &#123;</span><br><span class="line">      DivideAndAdd(obj);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>进行递归，同时优化递归，<strong>只有目标值在当前划分的区域内才会继续生成八叉树(继续分割)</strong></p>
+<p><strong>判断依据：根据目标点的Bounds和分割的八个节点的Bounds是否被其中一个覆盖到，如果覆盖到则继续递归</strong></p>
+<p><code>childBounds[i].Contains(oct.bounds.min) &amp;&amp; childBounds[i].Contains(oct.bounds.max) </code></p>
+<p><strong>PS：</strong>目标值只有两种情况，一种是已经找到了，就在该区域（此时覆盖不了，因为就在当前区域）；另外一种就是还没找到，此时在该区域下（1.还能继续划分 2.不能继续划分，因为已经到达叶子结点 &lt; minSize)</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//递归 根据目标点进行递增，只有包含了目标点的节点才会生成八叉树 </span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">DivideAndAdd</span>(<span class="params">GameObject obj</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//初始化目标点</span></span><br><span class="line">        OctreeObject oct = <span class="keyword">new</span> OctreeObject(obj);</span><br><span class="line">        <span class="comment">//递归终止条件</span></span><br><span class="line">        <span class="keyword">if</span>(rootBounds.size.y&lt;=minSize) </span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//进入结果集</span></span><br><span class="line">            containedObjects.Add(oct);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//初始化子节点数组</span></span><br><span class="line">        <span class="keyword">if</span>(children == <span class="literal">null</span>) </span><br><span class="line">            children = <span class="keyword">new</span> OctreeRoot[<span class="number">8</span>];</span><br><span class="line">        </span><br><span class="line">        <span class="built_in">bool</span> dividing = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="built_in">int</span> i=<span class="number">0</span>; i&lt;<span class="number">8</span>; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//初始化子节点</span></span><br><span class="line">            <span class="keyword">if</span>(children[i] == <span class="literal">null</span>) children[i] = <span class="keyword">new</span> OctreeRoot(childBounds[i],minSize);</span><br><span class="line">            </span><br><span class="line">            <span class="comment">//核心！！！ ---→ 只有涵盖了目标点的节点才会继续生成八叉树  (满足条件才递归)</span></span><br><span class="line">            <span class="keyword">if</span>(childBounds[i].Contains(oct.bounds.min) &amp;&amp; childBounds[i].Contains(oct.bounds.max))</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">//标记</span></span><br><span class="line">                dividing = <span class="literal">true</span>;</span><br><span class="line">                <span class="comment">//递归</span></span><br><span class="line">                children[i].DivideAndAdd(obj);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//如果没有分割，说明目标值已在该区域，不需要往下继续划分，所以也不用子节点</span></span><br><span class="line">        <span class="keyword">if</span>(dividing == <span class="literal">false</span>) </span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//进入结果集</span></span><br><span class="line">            containedObjects.Add(oct);</span><br><span class="line">            children = <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>最后划分出来的效果如图：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/./../images/%E5%85%AB%E5%8F%89%E6%A0%91/image-20241012151127958.png" alt="image-20241012151127958"></p>
+<p>这种划分可以找到对应的目标值，但如果要考虑到其准确性的话，其实这种方式仍然存在一个问题：</p>
+<p>那就是目标值的Bounds边界可能介于两个块或更多块中间，这时候它只会划分一个更大的块，而不会划分得更加精细，所以可以在判断划分的时候进行一个修改</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//if(childBounds[i].Contains(oct.bounds.min) &amp;&amp; childBounds[i].Contains(oct.bounds.max)) 改为：</span></span><br><span class="line"><span class="keyword">if</span>(childBounds[i].Intersects(oct.bounds))</span><br></pre></td></tr></table></figure>
+
+<p><strong><code>Bounds.Intersects</code></strong> 是 Unity 中用于检测两个包围盒（<code>Bounds</code>）是否相交（重叠）的方法。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://fourserives.github.io">Chen</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://fourserives.github.io/2024/10/11/%E5%85%AB%E5%8F%89%E6%A0%91/">https://fourserives.github.io/2024/10/11/%E5%85%AB%E5%8F%89%E6%A0%91/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://fourserives.github.io" target="_blank">凡尘的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://w.wallhaven.cc/full/vg/wallhaven-vglkw3.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2024/09/24/%E6%9F%8F%E6%9E%97%E5%99%AA%E5%A3%B0%E5%AE%9E%E8%B7%B5/"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://w.wallhaven.cc/full/vg/wallhaven-vglkw3.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">柏林噪声实践</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/null" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Chen</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">56</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>/前往博客</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Fourserives" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AB%E5%8F%89%E6%A0%91"><span class="toc-number">1.</span> <span class="toc-text">八叉树</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E8%BE%B9%E7%95%8C-Bound"><span class="toc-number">1.1.</span> <span class="toc-text">设置边界(Bound)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8A%82%E7%82%B9%E5%A4%84%E7%90%86"><span class="toc-number">1.2.</span> <span class="toc-text">节点处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%92%E5%88%86%E5%85%AB%E5%9D%97"><span class="toc-number">1.3.</span> <span class="toc-text">划分八块</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/10/11/%E5%85%AB%E5%8F%89%E6%A0%91/" title="八叉树"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://w.wallhaven.cc/full/vg/wallhaven-vglkw3.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="八叉树"/></a><div class="content"><a class="title" href="/2024/10/11/%E5%85%AB%E5%8F%89%E6%A0%91/" title="八叉树">八叉树</a><time datetime="2024-10-11T05:55:14.000Z" title="发表于 2024-10-11 13:55:14">2024-10-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/09/24/%E6%9F%8F%E6%9E%97%E5%99%AA%E5%A3%B0%E5%AE%9E%E8%B7%B5/" title="柏林噪声实践"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://w.wallhaven.cc/full/vg/wallhaven-vglkw3.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="柏林噪声实践"/></a><div class="content"><a class="title" href="/2024/09/24/%E6%9F%8F%E6%9E%97%E5%99%AA%E5%A3%B0%E5%AE%9E%E8%B7%B5/" title="柏林噪声实践">柏林噪声实践</a><time datetime="2024-09-24T11:33:03.000Z" title="发表于 2024-09-24 19:33:03">2024-09-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/08/19/%E8%A7%92%E8%89%B23C/" title="角色3C"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://w.wallhaven.cc/full/vg/wallhaven-vglkw3.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="角色3C"/></a><div class="content"><a class="title" href="/2024/08/19/%E8%A7%92%E8%89%B23C/" title="角色3C">角色3C</a><time datetime="2024-08-19T13:00:51.000Z" title="发表于 2024-08-19 21:00:51">2024-08-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/08/08/UGUI%E4%BC%98%E5%8C%96%E9%A1%B9/" title="UGUI优化项"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://w.wallhaven.cc/full/vg/wallhaven-vglkw3.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="UGUI优化项"/></a><div class="content"><a class="title" href="/2024/08/08/UGUI%E4%BC%98%E5%8C%96%E9%A1%B9/" title="UGUI优化项">UGUI优化项</a><time datetime="2024-08-08T01:50:58.000Z" title="发表于 2024-08-08 09:50:58">2024-08-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/08/07/%E7%BC%93%E5%AD%98%E6%B1%A0/" title="缓存池"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://w.wallhaven.cc/full/vg/wallhaven-vglkw3.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="缓存池"/></a><div class="content"><a class="title" href="/2024/08/07/%E7%BC%93%E5%AD%98%E6%B1%A0/" title="缓存池">缓存池</a><time datetime="2024-08-07T06:24:46.000Z" title="发表于 2024-08-07 14:24:46">2024-08-07</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 - 2024 By Chen</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="50" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
